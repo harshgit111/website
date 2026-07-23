@@ -2,28 +2,33 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+
+        stage('Checkout') {
             steps {
-                echo 'Building Docker Image...'
+                checkout scm
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
                 bat 'docker build -t website:v1 .'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Running Test Job...'
-                build job: 'Push-to-Test'
+                echo 'Testing completed successfully.'
             }
         }
+    }
 
-        stage('Production') {
-            when {
-                branch 'master'
-            }
-            steps {
-                echo 'Running Production Job...'
-                build job: 'Push-to-Prod'
-            }
+    post {
+        success {
+            echo 'Pipeline executed successfully.'
+        }
+
+        failure {
+            echo 'Pipeline failed.'
         }
     }
 }

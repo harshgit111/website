@@ -11,7 +11,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                bat 'docker build -t website:v1 .'
+                sh 'docker build -t website:v1 .'
             }
         }
 
